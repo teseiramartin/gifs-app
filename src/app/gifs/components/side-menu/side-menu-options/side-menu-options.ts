@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from "@angular/router";
+import { GifService } from 'src/app/gifs/services/gifs.service';
+
 
 interface MenuOption {
   icon: string;
@@ -15,6 +17,10 @@ interface MenuOption {
 })
 
 export class SideMenuOptions {
+  gifService = inject(GifService);
+
+  searchHistoryKeys = this.gifService.searchHistoryKeys;
+
   menuOptions: MenuOption[] = [
     {
       icon: 'fa-solid fa-chart-line',
