@@ -1,5 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
-import { GifList } from "../../components/gif-list/gif-list";
+import { Component, inject } from '@angular/core';
 import { GifService } from '../../services/gifs.service';
 
 // const imageUrls: string[] = [
@@ -20,9 +19,28 @@ import { GifService } from '../../services/gifs.service';
 @Component({
   selector: 'app-trending-page',
   templateUrl: './trending-page.html',
-  imports: [GifList],
+  // imports: [GifList],
 })
 
 export default class TrendingPage {
   gifService = inject(GifService);
+
+  private isNearBottom = false;
+
+  onScroll() {
+    const scrollTop = window.scrollY;
+    const clientHeight = window.innerHeight;
+    const scrollHeight = document.documentElement.scrollHeight;
+    const isNearBottom =
+      scrollTop + clientHeight + 100 >= scrollHeight;
+
+    if (isNearBottom && !this.isNearBottom) {
+      this.isNearBottom = true;
+      this.gifService.loadTrendingGifs();
+    }
+
+    if (!isNearBottom) {
+      this.isNearBottom = false;
+    }
+  }
 }
